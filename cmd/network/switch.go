@@ -12,12 +12,13 @@ import (
 	"github.com/chia-network/go-chia-libs/pkg/rpc"
 	"github.com/chia-network/go-modules/pkg/slogs"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var switchCmd = &cobra.Command{
 	Use:     "switch",
 	Short:   "Switches the active network on this machine",
-	Example: "chia-tools network switch testneta",
+	Example: "chia-tools network switch testnet11",
 	Args:    cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		networkName := args[0]
@@ -41,6 +42,15 @@ var switchCmd = &cobra.Command{
 		if currentNetwork == networkName {
 			slogs.Logr.Fatal("current network name and new network name are the same", "current", currentNetwork, "new", networkName)
 		}
+
+		// Ensure we have network constants for the network trying to be swapped to
+		if _, ok := cfg.NetworkOverrides.Constants[networkName]; !ok {
+			slogs.Logr.Fatal("selected network does not exist in config's network override constants", "network", networkName)
+		}
+		if _, ok := cfg.NetworkOverrides.Config[networkName]; !ok {
+			slogs.Logr.Fatal("selected network does not exist in config's network override config", "network", networkName)
+		}
+
 
 		// Ensure a folder to store the current network's sub-epoch-summaries and height-to-hash files exists
 		cacheFileDirOldNetwork := path.Join(chiaRoot, "db", currentNetwork)
@@ -111,6 +121,19 @@ var switchCmd = &cobra.Command{
 			walletPeersFilePath = fmt.Sprintf("wallet/db/wallet_peers-%s.dat", networkName)
 			bootstrapPeers = []string{fmt.Sprintf("node-%s.chia.net", networkName)}
 		}
+		if introFlag := viper.GetString("switch-introducer"); introFlag != "" {
+			introducerHost = introFlag
+		}
+		if dnsIntroFlag := viper.GetString("switch-dns-introducer"); dnsIntroFlag != "" {
+			dnsIntroducerHost = dnsIntroFlag
+		}
+		if bootPeer := viper.GetString("switch-bootstrap-peer"); bootPeer != "" {
+			bootstrapPeers = []string{bootPeer}
+		}
+		if portFlag := viper.GetUint16("switch-full-node-port"); portFlag != 0 {
+			fullNodePort = portFlag
+		}
+
 		pathUpdates := map[string]any{
 			"selected_network": networkName,
 			"farmer.full_node_peers": []config.Peer{
@@ -176,6 +199,16 @@ var switchCmd = &cobra.Command{
 }
 
 func init() {
+	networkCmd.PersistentFlags().String("introducer", "", "Override the default values for introducer host")
+	networkCmd.PersistentFlags().String("dns-introducer", "", "Override the default values for dns-introducer host")
+	networkCmd.PersistentFlags().String("bootstrap-peer", "", "Override the default value for seeder bootstrap peer")
+	networkCmd.PersistentFlags().Uint16("full-node-port", 0, "Override the default values for the full node port")
+
+	cobra.CheckErr(viper.BindPFlag("switch-introducer", networkCmd.PersistentFlags().Lookup("introducer")))
+	cobra.CheckErr(viper.BindPFlag("switch-dns-introducer", networkCmd.PersistentFlags().Lookup("dns-introducer")))
+	cobra.CheckErr(viper.BindPFlag("switch-bootstrap-peer", networkCmd.PersistentFlags().Lookup("bootstrap-peer")))
+	cobra.CheckErr(viper.BindPFlag("switch-full-node-port", networkCmd.PersistentFlags().Lookup("full-node-port")))
+
 	networkCmd.AddCommand(switchCmd)
 }
 
