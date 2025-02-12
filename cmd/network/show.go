@@ -7,9 +7,9 @@ import (
 	"os"
 	"text/tabwriter"
 
-	"github.com/chia-network/go-chia-libs/pkg/config"
-	"github.com/chia-network/go-chia-libs/pkg/rpc"
-	"github.com/chia-network/go-modules/pkg/slogs"
+	"github.com/chik-network/go-chik-libs/pkg/config"
+	"github.com/chik-network/go-chik-libs/pkg/rpc"
+	"github.com/chik-network/go-modules/pkg/slogs"
 	"github.com/spf13/cobra"
 )
 
@@ -24,13 +24,13 @@ var showCmd = &cobra.Command{
 
 // ShowNetworkInfo outputs network information from the configuration and any running services
 func ShowNetworkInfo() {
-	chiaRoot, err := config.GetChiaRootPath()
+	chikRoot, err := config.GetChikRootPath()
 	if err != nil {
-		slogs.Logr.Fatal("error determining chia root", "error", err)
+		slogs.Logr.Fatal("error determining chik root", "error", err)
 	}
-	slogs.Logr.Debug("Chia root discovered", "CHIA_ROOT", chiaRoot)
+	slogs.Logr.Debug("Chik root discovered", "CHIK_ROOT", chikRoot)
 
-	cfg, err := config.GetChiaConfig()
+	cfg, err := config.GetChikConfig()
 	if err != nil {
 		slogs.Logr.Fatal("error loading config", "error", err)
 	}

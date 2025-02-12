@@ -5,22 +5,22 @@ import (
 	"os"
 	"strings"
 
-	"github.com/chia-network/go-chia-libs/pkg/rpc"
-	"github.com/chia-network/go-modules/pkg/slogs"
+	"github.com/chik-network/go-chik-libs/pkg/rpc"
+	"github.com/chik-network/go-modules/pkg/slogs"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
-// bulkSubCmd Subscribes to multiple datastores at once using the output of chia data get_subscriptions
+// bulkSubCmd Subscribes to multiple datastores at once using the output of chik data get_subscriptions
 var bulkSubCmd = &cobra.Command{
 	Use:     "bulk-subscribe",
-	Short:   "Subscribes to multiple datastores at once using the output of chia data get_subscriptions",
-	Example: "chia-tools data bulk-subscribe -f subscriptions.json",
+	Short:   "Subscribes to multiple datastores at once using the output of chik data get_subscriptions",
+	Example: "chik-tools data bulk-subscribe -f subscriptions.json",
 	//Args:    cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := rpc.NewClient(rpc.ConnectionModeHTTP, rpc.WithAutoConfig())
 		if err != nil {
-			slogs.Logr.Fatal("error creating chia RPC client", "error", err)
+			slogs.Logr.Fatal("error creating chik RPC client", "error", err)
 		}
 
 		var content []byte

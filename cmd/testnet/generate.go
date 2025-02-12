@@ -8,7 +8,7 @@ import (
 var generateCmd = &cobra.Command{
 	Use:        "generate",
 	Short:      "Generates a new testnet",
-	Example:    "chia-tools testnet generate --network examplenet",
+	Example:    "chik-tools testnet generate --network examplenet",
 	Deprecated: "\nThe `testnet generate` command is deprecated. Please use the 'network generate' command instead\n",
 }
 

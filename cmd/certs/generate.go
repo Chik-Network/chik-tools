@@ -7,8 +7,8 @@ import (
 	"os"
 	"path"
 
-	"github.com/chia-network/go-chia-libs/pkg/tls"
-	"github.com/chia-network/go-modules/pkg/slogs"
+	"github.com/chik-network/go-chik-libs/pkg/tls"
+	"github.com/chik-network/go-modules/pkg/slogs"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -16,8 +16,8 @@ import (
 // generateCmd represents the generate command
 var generateCmd = &cobra.Command{
 	Use:     "generate",
-	Short:   "Generates a full set of certificates for chia-blockchain",
-	Example: "chia-tools certs generate --output ~/.chia/mainnet/config/ssl",
+	Short:   "Generates a full set of certificates for chik-blockchain",
+	Example: "chik-tools certs generate --output ~/.chik/mainnet/config/ssl",
 	Run: func(cmd *cobra.Command, args []string) {
 		var privateCACert *x509.Certificate
 		var privateCAKey *rsa.PrivateKey

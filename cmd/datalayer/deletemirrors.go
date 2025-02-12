@@ -3,9 +3,9 @@ package datalayer
 import (
 	"fmt"
 
-	"github.com/chia-network/go-chia-libs/pkg/rpc"
-	"github.com/chia-network/go-chia-libs/pkg/types"
-	"github.com/chia-network/go-modules/pkg/slogs"
+	"github.com/chik-network/go-chik-libs/pkg/rpc"
+	"github.com/chik-network/go-chik-libs/pkg/types"
+	"github.com/chik-network/go-modules/pkg/slogs"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -14,7 +14,7 @@ import (
 var deleteMirrorsCmd = &cobra.Command{
 	Use:     "delete-mirrors",
 	Short:   "Deletes all owned mirrors for all datalayer subscriptions",
-	Example: "chia-tools data delete-mirrors --all\nchia-tools data delete-mirrors --id abcd1234",
+	Example: "chik-tools data delete-mirrors --all\nchik-tools data delete-mirrors --id abcd1234",
 	PreRunE: func(cmd *cobra.Command, args []string) error {
 		all := viper.GetBool("delete-mirror-all")
 		subID := viper.GetString("delete-mirror-id")
@@ -26,13 +26,13 @@ var deleteMirrorsCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := rpc.NewClient(rpc.ConnectionModeHTTP, rpc.WithAutoConfig())
 		if err != nil {
-			slogs.Logr.Fatal("error creating chia RPC client", "error", err)
+			slogs.Logr.Fatal("error creating chik RPC client", "error", err)
 		}
 
 		// Figure out what fee we are using
-		feeXCH := viper.GetFloat64("delete-mirror-fee")
-		feeMojos := uint64(feeXCH * 1000000000000)
-		slogs.Logr.Info("fee for all transactions", "xch", feeXCH, "mojos", feeMojos)
+		feeXCK := viper.GetFloat64("delete-mirror-fee")
+		feeMojos := uint64(feeXCK * 1000000000000)
+		slogs.Logr.Info("fee for all transactions", "xck", feeXCK, "mojos", feeMojos)
 
 		all := viper.GetBool("delete-mirror-all")
 		subID := viper.GetString("delete-mirror-id")
@@ -90,7 +90,7 @@ func deleteMirrorsForSubscription(client *rpc.Client, subscription string, feeMo
 }
 
 func init() {
-	deleteMirrorsCmd.PersistentFlags().Float64P("fee", "m", 0, "Fee to use when deleting the mirrors. The fee is used per mirror. Units are XCH")
+	deleteMirrorsCmd.PersistentFlags().Float64P("fee", "m", 0, "Fee to use when deleting the mirrors. The fee is used per mirror. Units are XCK")
 	deleteMirrorsCmd.PersistentFlags().Bool("all", false, "Delete all owned mirrors for all subscriptions")
 	deleteMirrorsCmd.PersistentFlags().String("id", "", "The subscription ID to delete mirrors for")
 

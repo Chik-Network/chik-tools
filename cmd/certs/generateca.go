@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/chia-network/go-chia-libs/pkg/tls"
-	"github.com/chia-network/go-modules/pkg/slogs"
+	"github.com/chik-network/go-chik-libs/pkg/tls"
+	"github.com/chik-network/go-modules/pkg/slogs"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"gopkg.in/yaml.v3"
@@ -15,10 +15,10 @@ import (
 var generateCACmd = &cobra.Command{
 	Use:     "generate-ca",
 	Short:   "Generates a new random CA",
-	Example: "chia-tools certs generate-ca",
+	Example: "chik-tools certs generate-ca",
 	Run: func(cmd *cobra.Command, args []string) {
 		// Get the public CA cert and key byte slices
-		publicCACrtBytes, publicCAKeyBytes := tls.GetChiaCACertAndKey()
+		publicCACrtBytes, publicCAKeyBytes := tls.GetChikCACertAndKey()
 
 		// Generate a private CA cert and key
 		privateCACrt, privateCAKey, err := tls.GenerateNewCA()
@@ -33,8 +33,8 @@ var generateCACmd = &cobra.Command{
 		}
 
 		toMarshal := map[string]string{
-			"chia_ca.crt":    string(publicCACrtBytes),
-			"chia_ca.key":    string(publicCAKeyBytes),
+			"chik_ca.crt":    string(publicCACrtBytes),
+			"chik_ca.key":    string(publicCAKeyBytes),
 			"private_ca.crt": string(privateCACrtBytes),
 			"private_ca.key": string(privateCAKeyBytes),
 		}

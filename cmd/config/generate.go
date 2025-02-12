@@ -3,18 +3,18 @@ package config
 import (
 	"os"
 
-	"github.com/chia-network/go-chia-libs/pkg/config"
-	"github.com/chia-network/go-modules/pkg/slogs"
+	"github.com/chik-network/go-chik-libs/pkg/config"
+	"github.com/chik-network/go-modules/pkg/slogs"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"gopkg.in/yaml.v3"
 )
 
-// generateCmd generates a new chia config
+// generateCmd generates a new chik config
 var generateCmd = &cobra.Command{
 	Use:     "generate",
-	Short:   "Generate a new chia configuration file",
-	Example: "chia-tools config generate --set full_node.port=58444 --set full_node.target_peer_count=10 --output ~/.chia/mainnet/config/config.yaml",
+	Short:   "Generate a new chik configuration file",
+	Example: "chik-tools config generate --set full_node.port=59678 --set full_node.target_peer_count=10 --output ~/.chik/mainnet/config/config.yaml",
 	Run: func(cmd *cobra.Command, args []string) {
 		cfg, err := config.LoadDefaultConfig()
 		if err != nil {

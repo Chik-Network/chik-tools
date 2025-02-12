@@ -1,13 +1,13 @@
 package main
 
 import (
-	"github.com/chia-network/chia-tools/cmd"
-	_ "github.com/chia-network/chia-tools/cmd/certs"
-	_ "github.com/chia-network/chia-tools/cmd/config"
-	_ "github.com/chia-network/chia-tools/cmd/datalayer"
-	_ "github.com/chia-network/chia-tools/cmd/debug"
-	_ "github.com/chia-network/chia-tools/cmd/network"
-	_ "github.com/chia-network/chia-tools/cmd/testnet"
+	"github.com/chik-network/chik-tools/cmd"
+	_ "github.com/chik-network/chik-tools/cmd/certs"
+	_ "github.com/chik-network/chik-tools/cmd/config"
+	_ "github.com/chik-network/chik-tools/cmd/datalayer"
+	_ "github.com/chik-network/chik-tools/cmd/debug"
+	_ "github.com/chik-network/chik-tools/cmd/network"
+	_ "github.com/chik-network/chik-tools/cmd/testnet"
 )
 
 func main() {

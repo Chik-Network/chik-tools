@@ -3,24 +3,24 @@ package config
 import (
 	"path"
 
-	"github.com/chia-network/go-chia-libs/pkg/config"
-	"github.com/chia-network/go-modules/pkg/slogs"
+	"github.com/chik-network/go-chik-libs/pkg/config"
+	"github.com/chik-network/go-modules/pkg/slogs"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
 
-// editCmd generates a new chia config
+// editCmd generates a new chik config
 var editCmd = &cobra.Command{
 	Use:   "edit",
-	Short: "Edit an existing chia configuration file",
-	Example: `chia-tools config edit --config ~/.chia/mainnet/config/config.yaml --set full_node.port=58444 --set full_node.target_peer_count=10
+	Short: "Edit an existing chik configuration file",
+	Example: `chik-tools config edit --config ~/.chik/mainnet/config/config.yaml --set full_node.port=59678 --set full_node.target_peer_count=10
 
-# The following version will discover the config file by inspecting CHIA_ROOT or using the default CHIA_ROOT
-chia-tools config edit --set full_node.port=58444 --set full_node.target_peer_count=10`,
+# The following version will discover the config file by inspecting CHIK_ROOT or using the default CHIK_ROOT
+chik-tools config edit --set full_node.port=59678 --set full_node.target_peer_count=10`,
 	Run: func(cmd *cobra.Command, args []string) {
-		chiaRoot, err := config.GetChiaRootPath()
+		chikRoot, err := config.GetChikRootPath()
 		if err != nil {
-			slogs.Logr.Fatal("Unable to determine CHIA_ROOT", "error", err)
+			slogs.Logr.Fatal("Unable to determine CHIK_ROOT", "error", err)
 		}
 
 		if len(args) > 0 {
@@ -29,13 +29,13 @@ chia-tools config edit --set full_node.port=58444 --set full_node.target_peer_co
 
 		cfgPath := viper.GetString("config")
 		if cfgPath == "" {
-			// Use default chia root
-			cfgPath = path.Join(chiaRoot, "config", "config.yaml")
+			// Use default chik root
+			cfgPath = path.Join(chikRoot, "config", "config.yaml")
 		}
 
-		cfg, err := config.LoadConfigAtRoot(cfgPath, chiaRoot)
+		cfg, err := config.LoadConfigAtRoot(cfgPath, chikRoot)
 		if err != nil {
-			slogs.Logr.Fatal("error loading chia config", "error", err)
+			slogs.Logr.Fatal("error loading chik config", "error", err)
 		}
 
 		err = cfg.FillValuesFromEnvironment()

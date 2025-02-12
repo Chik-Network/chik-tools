@@ -6,13 +6,13 @@ import (
 	"path"
 	"strconv"
 
-	"github.com/chia-network/go-chia-libs/pkg/config"
-	"github.com/chia-network/go-chia-libs/pkg/peerprotocol"
-	"github.com/chia-network/go-modules/pkg/slogs"
+	"github.com/chik-network/go-chik-libs/pkg/config"
+	"github.com/chik-network/go-chik-libs/pkg/peerprotocol"
+	"github.com/chik-network/go-modules/pkg/slogs"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"github.com/chia-network/chia-tools/internal/utils"
+	"github.com/chik-network/chik-tools/internal/utils"
 )
 
 var (
@@ -23,14 +23,14 @@ var (
 var addTrustedPeerCmd = &cobra.Command{
 	Use:   "add-trusted-peer",
 	Short: "Adds a trusted peer to the config file",
-	Example: `chia-tools config add-trusted-peer 1.2.3.4
+	Example: `chik-tools config add-trusted-peer 1.2.3.4
 
 # The following version will also override the port to use when connecting to this peer
-chia-tools config add-trusted-peer 1.2.3.4 18444`,
+chik-tools config add-trusted-peer 1.2.3.4 19678`,
 	Run: func(cmd *cobra.Command, args []string) {
-		chiaRoot, err := config.GetChiaRootPath()
+		chikRoot, err := config.GetChikRootPath()
 		if err != nil {
-			slogs.Logr.Fatal("Unable to determine CHIA_ROOT", "error", err)
+			slogs.Logr.Fatal("Unable to determine CHIK_ROOT", "error", err)
 		}
 
 		// 1: Peer IP
@@ -41,13 +41,13 @@ chia-tools config add-trusted-peer 1.2.3.4 18444`,
 
 		cfgPath := viper.GetString("config")
 		if cfgPath == "" {
-			// Use default chia root
-			cfgPath = path.Join(chiaRoot, "config", "config.yaml")
+			// Use default chik root
+			cfgPath = path.Join(chikRoot, "config", "config.yaml")
 		}
 
-		cfg, err := config.LoadConfigAtRoot(cfgPath, chiaRoot)
+		cfg, err := config.LoadConfigAtRoot(cfgPath, chikRoot)
 		if err != nil {
-			slogs.Logr.Fatal("error loading chia config", "error", err)
+			slogs.Logr.Fatal("error loading chik config", "error", err)
 		}
 
 		peer := args[0]
@@ -66,12 +66,12 @@ chia-tools config add-trusted-peer 1.2.3.4 18444`,
 		}
 		slogs.Logr.Info("Attempting to get peer id", "peer", peer, "port", port)
 
-		keypair, err := cfg.FullNode.SSL.LoadPublicKeyPair(chiaRoot)
+		keypair, err := cfg.FullNode.SSL.LoadPublicKeyPair(chikRoot)
 		if err != nil {
-			slogs.Logr.Fatal("Error loading certs from CHIA_ROOT", "CHIA_ROOT", chiaRoot, "error", err)
+			slogs.Logr.Fatal("Error loading certs from CHIK_ROOT", "CHIK_ROOT", chikRoot, "error", err)
 		}
 		if keypair == nil {
-			slogs.Logr.Fatal("Error loading certs from CHIA_ROOT", "CHIA_ROOT", chiaRoot, "error", "keypair was nil")
+			slogs.Logr.Fatal("Error loading certs from CHIK_ROOT", "CHIK_ROOT", chikRoot, "error", "keypair was nil")
 		}
 		conn, err := peerprotocol.NewConnection(
 			&ip,
@@ -114,7 +114,7 @@ chia-tools config add-trusted-peer 1.2.3.4 18444`,
 			slogs.Logr.Fatal("error saving config", "error", err)
 		}
 
-		slogs.Logr.Info("Added trusted peer. Restart your chia services for the configuration to take effect")
+		slogs.Logr.Info("Added trusted peer. Restart your chik services for the configuration to take effect")
 	},
 }
 

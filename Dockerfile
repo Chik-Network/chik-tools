@@ -7,6 +7,6 @@ RUN make build
 
 FROM gcr.io/distroless/static-debian12
 
-COPY --from=builder /app/bin/chia-tools /chia-tools
+COPY --from=builder /app/bin/chik-tools /chik-tools
 
-ENTRYPOINT ["/chia-tools"]
+ENTRYPOINT ["/chik-tools"]

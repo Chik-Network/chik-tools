@@ -6,9 +6,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/chia-network/go-chia-libs/pkg/config"
-	"github.com/chia-network/go-chia-libs/pkg/types"
-	"github.com/chia-network/go-modules/pkg/slogs"
+	"github.com/chik-network/go-chik-libs/pkg/config"
+	"github.com/chik-network/go-chik-libs/pkg/types"
+	"github.com/chik-network/go-modules/pkg/slogs"
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -19,7 +19,7 @@ import (
 var generateCmd = &cobra.Command{
 	Use:     "generate",
 	Short:   "Generates new network constants",
-	Example: "chia-tools network generate --network examplenet",
+	Example: "chik-tools network generate --network examplenet",
 	Run: func(cmd *cobra.Command, args []string) {
 		networkName := viper.GetString("tn-gen-network")
 		genesisHashBytes := sha256.Sum256([]byte(networkName))
@@ -39,7 +39,7 @@ var generateCmd = &cobra.Command{
 			SubSlotItersStarting:           viper.GetUint64("tn-gen-sub-slot-iters-starting"),
 		}
 		cfg := &config.NetworkConfig{
-			AddressPrefix:       "txch",
+			AddressPrefix:       "txck",
 			DefaultFullNodePort: viper.GetUint16("tn-gen-port"),
 		}
 

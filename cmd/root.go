@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"github.com/chia-network/go-modules/pkg/slogs"
+	"github.com/chik-network/go-modules/pkg/slogs"
 )
 
 var (
@@ -18,8 +18,8 @@ var (
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
-	Use:     "chia-tools",
-	Short:   "Collection of CLI tools for working with Chia Blockchain",
+	Use:     "chik-tools",
+	Short:   "Collection of CLI tools for working with Chik Blockchain",
 	Version: fmt.Sprintf("%s (%s)", gitVersion, buildTime),
 }
 
@@ -46,12 +46,12 @@ func initConfig() {
 	home, err := os.UserHomeDir()
 	cobra.CheckErr(err)
 
-	// Search config in home directory with name ".chia-tools" (without extension).
+	// Search config in home directory with name ".chik-tools" (without extension).
 	viper.AddConfigPath(home)
 	viper.SetConfigType("yaml")
-	viper.SetConfigName(".chia-tools")
+	viper.SetConfigName(".chik-tools")
 
-	viper.SetEnvPrefix("CHIA_TOOLS")
+	viper.SetEnvPrefix("CHIK_TOOLS")
 	viper.SetEnvKeyReplacer(strings.NewReplacer("-", "_"))
 	viper.AutomaticEnv() // read in environment variables that match
 

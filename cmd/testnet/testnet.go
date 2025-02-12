@@ -3,13 +3,13 @@ package testnet
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/chia-network/chia-tools/cmd"
+	"github.com/chik-network/chik-tools/cmd"
 )
 
 // testnetCmd represents the config command
 var testnetCmd = &cobra.Command{
 	Use:        "testnet",
-	Short:      "Utilities for working with chia testnets",
+	Short:      "Utilities for working with chik testnets",
 	Deprecated: "\nThe testnet subcommand is deprecated. Please use the 'network' subcommand instead\n",
 }
 

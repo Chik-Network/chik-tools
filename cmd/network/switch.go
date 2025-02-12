@@ -9,19 +9,19 @@ import (
 	"path"
 	"syscall"
 
-	"github.com/chia-network/go-chia-libs/pkg/config"
-	"github.com/chia-network/go-chia-libs/pkg/rpc"
-	"github.com/chia-network/go-modules/pkg/slogs"
+	"github.com/chik-network/go-chik-libs/pkg/config"
+	"github.com/chik-network/go-chik-libs/pkg/rpc"
+	"github.com/chik-network/go-modules/pkg/slogs"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"github.com/chia-network/chia-tools/internal/connect"
+	"github.com/chik-network/chik-tools/internal/connect"
 )
 
 var switchCmd = &cobra.Command{
 	Use:     "switch",
 	Short:   "Switches the active network on this machine",
-	Example: "chia-tools network switch testnet11",
+	Example: "chik-tools network switch testnet11",
 	Args:    cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		networkName := args[0]
@@ -56,13 +56,13 @@ type retainedSettings struct {
 func SwitchNetwork(networkName string, checkForRunningNode bool) {
 	slogs.Logr.Info("Swapping to network", "network", networkName)
 
-	chiaRoot, err := config.GetChiaRootPath()
+	chikRoot, err := config.GetChikRootPath()
 	if err != nil {
-		slogs.Logr.Fatal("error determining chia root", "error", err)
+		slogs.Logr.Fatal("error determining chik root", "error", err)
 	}
-	slogs.Logr.Debug("Chia root discovered", "CHIA_ROOT", chiaRoot)
+	slogs.Logr.Debug("Chik root discovered", "CHIK_ROOT", chikRoot)
 
-	cfg, err := config.GetChiaConfig()
+	cfg, err := config.GetChikConfig()
 	if err != nil {
 		slogs.Logr.Fatal("error loading config", "error", err)
 	}
@@ -88,8 +88,8 @@ func SwitchNetwork(networkName string, checkForRunningNode bool) {
 	}
 
 	// Ensure a folder to store the current network's sub-epoch-summaries and height-to-hash files exists
-	cacheFileDirOldNetwork := path.Join(chiaRoot, "db", currentNetwork)
-	cacheFileDirNewNetwork := path.Join(chiaRoot, "db", networkName)
+	cacheFileDirOldNetwork := path.Join(chikRoot, "db", currentNetwork)
+	cacheFileDirNewNetwork := path.Join(chikRoot, "db", networkName)
 
 	slogs.Logr.Debug("ensuring directory exists for current network cache files", "directory", cacheFileDirOldNetwork)
 	err = os.MkdirAll(cacheFileDirOldNetwork, 0755)
@@ -135,24 +135,24 @@ func SwitchNetwork(networkName string, checkForRunningNode bool) {
 
 	// Check if Full Node is running
 	if checkForRunningNode {
-		slogs.Logr.Debug("initializing websocket client to ensure chia is stopped")
+		slogs.Logr.Debug("initializing websocket client to ensure chik is stopped")
 		rpcClient, err := rpc.NewClient(rpc.ConnectionModeWebsocket, rpc.WithAutoConfig(), rpc.WithSyncWebsocket())
 		if err != nil {
 			slogs.Logr.Fatal("error initializing RPC client", "error", err)
 		}
 
-		slogs.Logr.Info("Ensuring chia services are stopped")
+		slogs.Logr.Info("Ensuring chik services are stopped")
 		_, _, err = rpcClient.DaemonService.Exit()
 		if err != nil {
 			if !isConnectionRefused(err) {
-				slogs.Logr.Fatal("error stopping chia services", "error", err)
+				slogs.Logr.Fatal("error stopping chik services", "error", err)
 			}
 		}
 	}
 
 	// Safe to move files now
-	activeSubEpochSummariesPath := path.Join(chiaRoot, "db", "sub-epoch-summaries")
-	activeHeightToHashPath := path.Join(chiaRoot, "db", "height-to-hash")
+	activeSubEpochSummariesPath := path.Join(chikRoot, "db", "sub-epoch-summaries")
+	activeHeightToHashPath := path.Join(chikRoot, "db", "height-to-hash")
 
 	// Move current cache files to the network subdir
 	err = moveAndOverwriteFile(activeSubEpochSummariesPath, path.Join(cacheFileDirOldNetwork, "sub-epoch-summaries"))
@@ -174,22 +174,22 @@ func SwitchNetwork(networkName string, checkForRunningNode bool) {
 		slogs.Logr.Fatal("error moving height-to-hash file", "error", err)
 	}
 
-	introducerHost := "introducer.chia.net"
-	dnsIntroducerHosts := []string{"dns-introducer.chia.net"}
-	fullNodePort := uint16(8444)
+	introducerHost := "introducer.chiknetwork.com"
+	dnsIntroducerHosts := []string{"dns-introducer.chiknetwork.com"}
+	fullNodePort := uint16(9678)
 	var fullnodePeers []config.Peer
 	var walletFullNodePeers []config.Peer
 	peersFilePath := "db/peers.dat"
 	walletPeersFilePath := "wallet/db/wallet_peers.dat"
-	bootstrapPeers := []string{"node.chia.net"}
+	bootstrapPeers := []string{"node.chiknetwork.com"}
 	var staticPeers []string
 	if networkName != "mainnet" {
-		introducerHost = fmt.Sprintf("introducer-%s.chia.net", networkName)
-		dnsIntroducerHosts = []string{fmt.Sprintf("dns-introducer-%s.chia.net", networkName)}
-		fullNodePort = uint16(58444)
+		introducerHost = fmt.Sprintf("introducer-%s.chiknetwork.com", networkName)
+		dnsIntroducerHosts = []string{fmt.Sprintf("dns-introducer-%s.chiknetwork.com", networkName)}
+		fullNodePort = uint16(59678)
 		peersFilePath = fmt.Sprintf("db/peers-%s.dat", networkName)
 		walletPeersFilePath = fmt.Sprintf("wallet/db/wallet_peers-%s.dat", networkName)
-		bootstrapPeers = []string{fmt.Sprintf("node-%s.chia.net", networkName)}
+		bootstrapPeers = []string{fmt.Sprintf("node-%s.chiknetwork.com", networkName)}
 	}
 
 	// Any stored settings for the new network should be applied here, before any flags override them
@@ -278,10 +278,10 @@ func SwitchNetwork(networkName string, checkForRunningNode bool) {
 	slogs.Logr.Debug("saving config")
 	err = cfg.Save()
 	if err != nil {
-		slogs.Logr.Fatal("error saving chia config", "error", err)
+		slogs.Logr.Fatal("error saving chik config", "error", err)
 	}
 
-	err = removeFileIfExists(path.Join(chiaRoot, "db", peersFilePath))
+	err = removeFileIfExists(path.Join(chikRoot, "db", peersFilePath))
 	if err != nil {
 		slogs.Logr.Error("error removing old peers.dat file", "path", peersFilePath, "error", err)
 	}

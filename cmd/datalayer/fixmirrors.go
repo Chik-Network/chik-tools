@@ -5,8 +5,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/chia-network/go-chia-libs/pkg/rpc"
-	"github.com/chia-network/go-modules/pkg/slogs"
+	"github.com/chik-network/go-chik-libs/pkg/rpc"
+	"github.com/chik-network/go-modules/pkg/slogs"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -15,7 +15,7 @@ import (
 var fixMirrorsCmd = &cobra.Command{
 	Use:     "fix-mirrors",
 	Short:   "For all owned mirrors, replaces one url with a new url",
-	Example: "chia-tools data fix-mirrors -b 127.0.0.1 -n https://my-dl-domain.com -a 300 -m 0.00000001",
+	Example: "chik-tools data fix-mirrors -b 127.0.0.1 -n https://my-dl-domain.com -a 300 -m 0.00000001",
 	PreRunE: func(cmd *cobra.Command, args []string) error {
 		newURL := viper.GetString("fix-mirror-new-url")
 		oldURL := viper.GetString("fix-mirror-bad-url")
@@ -29,13 +29,13 @@ var fixMirrorsCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := rpc.NewClient(rpc.ConnectionModeHTTP, rpc.WithAutoConfig())
 		if err != nil {
-			slogs.Logr.Fatal("error creating chia RPC client", "error", err)
+			slogs.Logr.Fatal("error creating chik RPC client", "error", err)
 		}
 
 		// Figure out what fee we are using
-		feeXCH := viper.GetFloat64("fix-mirror-fee")
-		feeMojos := uint64(feeXCH * 1000000000000)
-		slogs.Logr.Info("fee for all transactions", "xch", feeXCH, "mojos", feeMojos)
+		feeXCK := viper.GetFloat64("fix-mirror-fee")
+		feeMojos := uint64(feeXCK * 1000000000000)
+		slogs.Logr.Info("fee for all transactions", "xck", feeXCK, "mojos", feeMojos)
 
 		subscriptions, _, err := client.DataLayerService.GetSubscriptions(&rpc.DatalayerGetSubscriptionsOptions{})
 		if err != nil {
@@ -122,7 +122,7 @@ func waitForAvailableBalance(client *rpc.Client, amount uint64) {
 }
 
 func init() {
-	fixMirrorsCmd.PersistentFlags().Float64P("fee", "m", 0, "Fee to use when deleting and launching the mirrors. The fee is used per mirror. Units are XCH")
+	fixMirrorsCmd.PersistentFlags().Float64P("fee", "m", 0, "Fee to use when deleting and launching the mirrors. The fee is used per mirror. Units are XCK")
 	fixMirrorsCmd.PersistentFlags().StringP("new-url", "n", "", "New mirror URL (required)")
 	fixMirrorsCmd.PersistentFlags().StringP("bad-url", "b", "", "Old mirror URL to replace (required)")
 	fixMirrorsCmd.PersistentFlags().Uint64P("amount", "a", 100, "Mirror coin amount in mojos")

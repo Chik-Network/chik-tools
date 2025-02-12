@@ -5,24 +5,24 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/chia-network/go-chia-libs/pkg/config"
-	"github.com/chia-network/go-chia-libs/pkg/types"
+	"github.com/chik-network/go-chik-libs/pkg/config"
+	"github.com/chik-network/go-chik-libs/pkg/types"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/chia-network/chia-tools/cmd"
-	"github.com/chia-network/chia-tools/cmd/network"
+	"github.com/chik-network/chik-tools/cmd"
+	"github.com/chik-network/chik-tools/cmd/network"
 )
 
 const testnetwork = "unittestnet"
 
 func setupDefaultConfig(t *testing.T) {
-	tempDir, err := os.MkdirTemp("", "chia-root-*")
+	tempDir, err := os.MkdirTemp("", "chik-root-*")
 	assert.NoError(t, err)
 
-	err = os.Setenv("CHIA_ROOT", tempDir)
+	err = os.Setenv("CHIK_ROOT", tempDir)
 	assert.NoError(t, err)
 
-	rootPath, err := config.GetChiaRootPath()
+	rootPath, err := config.GetChikRootPath()
 	assert.NoError(t, err)
 
 	err = os.MkdirAll(filepath.Join(rootPath, "config"), 0755)
@@ -45,7 +45,7 @@ func setupDefaultConfig(t *testing.T) {
 		SubSlotItersStarting:           67108864,
 	}
 	defaultConfig.NetworkOverrides.Config[testnetwork] = config.NetworkConfig{
-		AddressPrefix:       "txch",
+		AddressPrefix:       "txck",
 		DefaultFullNodePort: 58445,
 	}
 
@@ -57,14 +57,14 @@ func setupDefaultConfig(t *testing.T) {
 func TestNetworkSwitch(t *testing.T) {
 	cmd.InitLogs()
 	setupDefaultConfig(t)
-	cfg, err := config.GetChiaConfig()
+	cfg, err := config.GetChikConfig()
 	assert.NoError(t, err)
 	assert.Equal(t, "mainnet", *cfg.SelectedNetwork)
 
 	network.SwitchNetwork("unittestnet", false)
 
 	// reload config from disk
-	cfg, err = config.GetChiaConfig()
+	cfg, err = config.GetChikConfig()
 	assert.NoError(t, err)
 
 	port := uint16(58445)
@@ -75,24 +75,24 @@ func TestNetworkSwitch(t *testing.T) {
 	assert.Equal(t, "unittestnet", *cfg.SelectedNetwork)
 	assert.Equal(t, []config.Peer{localpeer}, cfg.Farmer.FullNodePeers)
 	assert.Equal(t, "db/blockchain_v2_unittestnet.sqlite", cfg.FullNode.DatabasePath)
-	assert.Equal(t, []string{"dns-introducer-unittestnet.chia.net"}, cfg.FullNode.DNSServers)
+	assert.Equal(t, []string{"dns-introducer-unittestnet.chiknetwork.com"}, cfg.FullNode.DNSServers)
 	assert.Equal(t, "db/peers-unittestnet.dat", cfg.FullNode.PeersFilePath)
 	assert.Equal(t, port, cfg.FullNode.Port)
-	assert.Equal(t, config.Peer{Host: "introducer-unittestnet.chia.net", Port: port}, cfg.FullNode.IntroducerPeer)
+	assert.Equal(t, config.Peer{Host: "introducer-unittestnet.chiknetwork.com", Port: port}, cfg.FullNode.IntroducerPeer)
 	assert.Equal(t, port, cfg.Introducer.Port)
 	assert.Equal(t, port, cfg.Seeder.OtherPeersPort)
-	assert.Equal(t, []string{"node-unittestnet.chia.net"}, cfg.Seeder.BootstrapPeers)
+	assert.Equal(t, []string{"node-unittestnet.chiknetwork.com"}, cfg.Seeder.BootstrapPeers)
 	assert.Equal(t, []config.Peer{localpeer}, cfg.Timelord.FullNodePeers)
-	assert.Equal(t, []string{"dns-introducer-unittestnet.chia.net"}, cfg.Wallet.DNSServers)
+	assert.Equal(t, []string{"dns-introducer-unittestnet.chiknetwork.com"}, cfg.Wallet.DNSServers)
 	assert.Equal(t, []config.Peer{localpeer}, cfg.Wallet.FullNodePeers)
-	assert.Equal(t, config.Peer{Host: "introducer-unittestnet.chia.net", Port: port}, cfg.Wallet.IntroducerPeer)
+	assert.Equal(t, config.Peer{Host: "introducer-unittestnet.chiknetwork.com", Port: port}, cfg.Wallet.IntroducerPeer)
 	assert.Equal(t, "wallet/db/wallet_peers-unittestnet.dat", cfg.Wallet.WalletPeersFilePath)
 }
 
 func TestNetworkSwitch_SettingRetention(t *testing.T) {
 	cmd.InitLogs()
 	setupDefaultConfig(t)
-	cfg, err := config.GetChiaConfig()
+	cfg, err := config.GetChikConfig()
 	assert.NoError(t, err)
 	assert.Equal(t, "mainnet", *cfg.SelectedNetwork)
 
@@ -105,23 +105,23 @@ func TestNetworkSwitch_SettingRetention(t *testing.T) {
 	assert.NoError(t, err)
 
 	// reload config from disk to ensure the dns servers were persisted
-	cfg, err = config.GetChiaConfig()
+	cfg, err = config.GetChikConfig()
 	assert.NoError(t, err)
 	assert.Equal(t, []string{"dns-mainnet-1.example.com", "dns-mainnet-2.example.com"}, cfg.FullNode.DNSServers)
 
 	network.SwitchNetwork("unittestnet", false)
 	// reload config from disk to ensure defaults are in the config now
-	cfg, err = config.GetChiaConfig()
+	cfg, err = config.GetChikConfig()
 	assert.NoError(t, err)
-	assert.Equal(t, []string{"dns-introducer-unittestnet.chia.net"}, cfg.FullNode.DNSServers)
-	assert.Equal(t, []string{"node-unittestnet.chia.net"}, cfg.Seeder.BootstrapPeers)
+	assert.Equal(t, []string{"dns-introducer-unittestnet.chiknetwork.com"}, cfg.FullNode.DNSServers)
+	assert.Equal(t, []string{"node-unittestnet.chiknetwork.com"}, cfg.Seeder.BootstrapPeers)
 	assert.Equal(t, []string{}, cfg.Seeder.StaticPeers)
 	assert.Equal(t, []config.Peer{}, cfg.FullNode.FullNodePeers)
 
 	network.SwitchNetwork("mainnet", false)
 
 	// reload config from disk
-	cfg, err = config.GetChiaConfig()
+	cfg, err = config.GetChikConfig()
 	assert.NoError(t, err)
 	assert.Equal(t, []string{"dns-mainnet-1.example.com", "dns-mainnet-2.example.com"}, cfg.FullNode.DNSServers)
 	assert.Equal(t, []string{"bootstrap-mainnet-1.example.com"}, cfg.Seeder.BootstrapPeers)

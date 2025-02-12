@@ -10,14 +10,14 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	"github.com/chia-network/go-chia-libs/pkg/config"
-	"github.com/chia-network/go-chia-libs/pkg/rpc"
-	"github.com/chia-network/go-modules/pkg/slogs"
+	"github.com/chik-network/go-chik-libs/pkg/config"
+	"github.com/chik-network/go-chik-libs/pkg/rpc"
+	"github.com/chik-network/go-modules/pkg/slogs"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"github.com/chia-network/chia-tools/cmd"
-	"github.com/chia-network/chia-tools/cmd/network"
+	"github.com/chik-network/chik-tools/cmd"
+	"github.com/chik-network/chik-tools/cmd/network"
 )
 
 // Define a fixed column width for size
@@ -40,7 +40,7 @@ var exclusions = []string{
 // debugCmd represents the config command
 var debugCmd = &cobra.Command{
 	Use:   "debug",
-	Short: "Outputs debugging information about Chia",
+	Short: "Outputs debugging information about Chik",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("# Version Information")
 		fmt.Println(strings.Repeat("-", 60)) // Separator
@@ -98,7 +98,7 @@ func runningHelper(w io.Writer, service hasVersionInfo, label string) {
 }
 
 func debugPorts() {
-	cfg, err := config.GetChiaConfig()
+	cfg, err := config.GetChikConfig()
 	if err != nil {
 		fmt.Println("Could not load config")
 		return
@@ -119,20 +119,20 @@ func debugPorts() {
 	_ = w.Flush()
 }
 
-// debugFileSizes retrieves the Chia root path and prints sorted file paths with sizes
+// debugFileSizes retrieves the Chik root path and prints sorted file paths with sizes
 func debugFileSizes() {
-	chiaroot, err := config.GetChiaRootPath()
+	chikroot, err := config.GetChikRootPath()
 	if err != nil {
-		fmt.Printf("Could not determine CHIA_ROOT: %s\n", err.Error())
+		fmt.Printf("Could not determine CHIK_ROOT: %s\n", err.Error())
 		return
 	}
 
-	fmt.Println("Scanning:", chiaroot)
+	fmt.Println("Scanning:", chikroot)
 	fmt.Printf("%-*s %s\n", sizeColumnWidth, "Size", "File") // Header
 	fmt.Println(strings.Repeat("-", 60))                     // Separator
 
 	// Collect files and sort them by size
-	files := collectFiles(chiaroot)
+	files := collectFiles(chikroot)
 	if viper.GetBool("debug-sort") {
 		sort.Slice(files, func(i, j int) bool {
 			return files[i].Size > files[j].Size // Sort descending
@@ -168,7 +168,7 @@ func collectFiles(root string) []FileInfo {
 		return nil
 	})
 	if err != nil {
-		slogs.Logr.Fatal("error scanning chia root")
+		slogs.Logr.Fatal("error scanning chik root")
 	}
 	return files
 }

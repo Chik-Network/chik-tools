@@ -3,8 +3,8 @@ package datalayer
 import (
 	"slices"
 
-	"github.com/chia-network/go-chia-libs/pkg/rpc"
-	"github.com/chia-network/go-modules/pkg/slogs"
+	"github.com/chik-network/go-chik-libs/pkg/rpc"
+	"github.com/chik-network/go-modules/pkg/slogs"
 	"github.com/spf13/cobra"
 )
 
@@ -15,7 +15,7 @@ var unsubAllCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		client, err := rpc.NewClient(rpc.ConnectionModeHTTP, rpc.WithAutoConfig())
 		if err != nil {
-			slogs.Logr.Fatal("error creating chia RPC client", "error", err)
+			slogs.Logr.Fatal("error creating chik RPC client", "error", err)
 		}
 
 		ownedStores, _, err := client.DataLayerService.GetOwnedStores(&rpc.DatalayerGetOwnedStoresOptions{})
