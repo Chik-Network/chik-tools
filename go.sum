@@ -1,7 +1,7 @@
-github.com/chik-network/go-chik-libs v0.20.6 h1:dtfSjTPifQpEp4OrDiWNQ2MAwcSkmdgnx5JIALpMfaA=
-github.com/chik-network/go-chik-libs v0.20.6/go.mod h1:+RMorskgxwYzPGf2gIyW0k7FGDdLrrH4X5ATrrMreb0=
-github.com/chik-network/go-modules v0.0.8 h1:VATMxehRISOhaRwPo/GL735IKWW0G7sUYH2OmBofsfE=
-github.com/chik-network/go-modules v0.0.8/go.mod h1:OdvlWftyJc3+i3QYv5cfQsiQASL7Em7fJnzdmPmj07M=
+github.com/chik-network/go-chik-libs v0.20.6 h1:fc0ttp+AHmwxKnuHy1QwzvRyMzs2+S7EoXCyFtiiZqo=
+github.com/chik-network/go-chik-libs v0.20.6/go.mod h1:PowUOyq6nTw1XX/kJnetrsdBuaR9EXffavpjJ06J20Y=
+github.com/chik-network/go-modules v0.0.8 h1:9Z8cGDz3WmdJotWJn2v2hEXvKfOgsLuKCnxw/m3o6Iw=
+github.com/chik-network/go-modules v0.0.8/go.mod h1:3YNlst9u69ZDXrAgpx23gHSXNfVQizasHdw5tbT2MCE=
 github.com/cpuguy83/go-md2man/v2 v2.0.4/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc h1:U9qPSI2PIWSS1VwoXQT9A3Wy9MM3WgvqSxFWenqJduM=
