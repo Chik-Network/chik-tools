@@ -2,7 +2,7 @@ name: Go Test
 on:
   push:
     branches:
-      - main1
+      - main
   pull_request:
 
 jobs:
