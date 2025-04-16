@@ -5,13 +5,13 @@ go 1.23.0
 toolchain go1.24.1
 
 require (
-	github.com/chik-network/go-chik-libs v0.21.0
-	github.com/chik-network/go-modules v0.0.8
+	github.com/chik-network/go-chik-libs v0.21.4
+	github.com/chik-network/go-modules v0.0.9
 	github.com/spf13/cast v1.7.1
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/viper v1.20.1
 	github.com/stretchr/testify v1.10.0
-	golang.org/x/sys v0.31.0
+	golang.org/x/sys v0.32.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
