@@ -7,6 +7,11 @@ import (
 	"github.com/chik-network/chik-tools/cmd"
 )
 
+var (
+	skipConfirm bool
+	retries     uint
+)
+
 // configCmd represents the config command
 var configCmd = &cobra.Command{
 	Use:   "config",
