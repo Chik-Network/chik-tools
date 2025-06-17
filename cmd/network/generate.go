@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"github.com/chik-network/go-chik-libs/pkg/config"
+	"github.com/chik-network/go-chik-libs/pkg/ptr"
 	"github.com/chik-network/go-chik-libs/pkg/types"
 	"github.com/chik-network/go-modules/pkg/slogs"
 	"github.com/spf13/cast"
@@ -37,6 +38,7 @@ var generateCmd = &cobra.Command{
 			MinPlotSize:                    cast.ToUint8(viper.Get("tn-gen-min-plot-size")),
 			NetworkType:                    1,
 			SubSlotItersStarting:           viper.GetUint64("tn-gen-sub-slot-iters-starting"),
+			HardForkHeight:                 ptr.Uint32Ptr(0),
 		}
 		cfg := &config.NetworkConfig{
 			AddressPrefix:       "txck",
